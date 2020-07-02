@@ -1,7 +1,12 @@
-import React from "react"
+import React from 'react'
+import WeatherContainer from './components/WeatherContainer'
 
-function App() {
-  return <div data-testid="app">app</div>
+const App: React.FC = () => {
+  return (
+    <div data-testid="app">
+      <WeatherContainer />
+    </div>
+  )
 }
 
 export default App
