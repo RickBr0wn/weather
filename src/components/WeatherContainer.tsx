@@ -1,9 +1,9 @@
-import React, { Fragment, useState, FC } from 'react'
+import React, { useState, FC } from 'react'
 import ImageSection from './ImageSection'
 import Navbar from './Navbar'
-import DaysList from './DaysList'
-import { Day } from '../types'
+import DataSection from './DataSection'
 import { useFetch } from '../services/useFetch'
+import capitalizeFirstLetter from '../services/capitalizeFirstLetter'
 
 const WeatherContainer: FC = (): JSX.Element | null => {
   const [location, setLocation] = useState<string>('')
@@ -17,16 +17,6 @@ const WeatherContainer: FC = (): JSX.Element | null => {
     `http://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lng}&APPID=${process.env.REACT_APP_WEATHER_API_KEY}&units=metric`
   )
 
-  const days: Array<Day> = [
-    { day: 'Monday' },
-    { day: 'Tuesday' },
-    { day: 'Wednesday' },
-    { day: 'Thursday' },
-    { day: 'Friday' },
-    { day: 'Saturday' },
-    { day: 'Sunday' },
-  ]
-
   if (error) {
     return <p>Oops! There has been an error!</p>
   }
@@ -36,11 +26,24 @@ const WeatherContainer: FC = (): JSX.Element | null => {
   }
 
   if (response && response.data) {
+    const { data } = response
+
+    console.log(data)
+
     return (
       <div data-testid="weather-container">
         <Navbar location={location} setLocation={setLocation} />
-        <ImageSection location={response.data.name} weatherType={'cloudy'} />
-        <DaysList days={days} />
+        <ImageSection
+          description={data.weather[0].description}
+          location={data.name}
+          weatherType={data.weather[0].main}
+          coords={data.coord}
+        />
+        <DataSection
+          description={capitalizeFirstLetter(data.weather[0].description)}
+          icon={data.weather[0].icon}
+        />
+        <pre>{JSON.stringify(data, null, 2)}</pre>
       </div>
     )
   }

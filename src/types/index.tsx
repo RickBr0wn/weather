@@ -2,13 +2,49 @@ import { Dispatch, SetStateAction } from 'react'
 
 type location = string
 
-export type Day = {
-  day: string
+interface Clouds {
+  all: number
 }
 
-export type Days = Day[]
+interface Coords {
+  lon: number
+  lat: number
+}
 
-export type DataRowProps = { days: Days }
+interface Main {
+  feels_like: number
+  humidity: number
+  pressure: number
+  temp: number
+  temp_max: number
+  temp_min: number
+}
+
+interface Sys {
+  type: number
+  id: number
+  country: string
+  sunrise: number
+  sunset: number
+}
+
+interface Wind {
+  speed: number
+  deg: number
+  gust: number
+}
+
+interface WeatherItem {
+  description: string
+  icon: string
+  id: number
+  main: string
+}
+
+export interface DataProps {
+  description: string
+  icon: string
+}
 
 export interface LocationProps {
   location: location | undefined
@@ -23,10 +59,8 @@ export interface NavbarProps {
 export interface WeatherProps {
   weatherType: string
   location: string | undefined
-}
-
-export interface DaysProps {
-  days: Day[]
+  description?: string
+  coords: Coords
 }
 
 export type MountedRef = boolean
@@ -36,23 +70,18 @@ export interface Weather {
   base: string
   clouds: Clouds
   cod: number
-  coord: Clouds
+  coord: Coords
   dt: number
   id: number
   name: string
-  // main: {temp: 17.99, feels_like: 17.27, temp_min: 16.67, temp_max: 18.89, pressure: 1012, …}
-  // sys: {type: 3, id: 2002488, country: "GB", sunrise: 1594266743, sunset: 1594325442}
-  // timezone: 3600
-  // weather: [Object] (1)
-  // wind: {speed: 2.68, deg: 233, gust: 3.58}
+  main: Main
+  sys: Sys
+  timezone: number
+  weather: WeatherItem[]
+  wind: Wind
 }
 
 export interface IResponse {
-  end?: string
-  status?: number
-  error?: boolean
-  primitive?: string
-  length?: number
   data?: Weather
 }
 
@@ -60,11 +89,6 @@ export type IError = boolean
 
 export type IsLoading = boolean
 
-interface Clouds {
-  all: number
-}
-
-interface Coords {
-  lon: number
-  lat: number
+export interface Images {
+  [key: string]: string
 }
